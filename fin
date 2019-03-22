@@ -1,0 +1,42 @@
+begin
+
+  case  block.[TU].[0] of
+  :4:  return ' не установлен тип!';
+  :3:  ss:='ИП';
+  :2:  ss:='ФЛ';
+  :1:  ss:='ЮЛ';
+
+  else
+  null;
+  end;
+
+
+  nn:=to_number(substr(acc,4,2));
+
+	if  ( substr(acc,1,3) in ('407','406','405','422','706') ) or
+	     ( acc in ('40807') ) or
+	    ( substr(acc,1,3)='421' and nn>0 and nn<=7) then
+	    if block.[TU].[0]<> 1 then
+	       return 'ТИП клиента '||ss||' не соответствует счету (ЮЛ) ! ';
+	    end if;
+	end if;
+	
+	if
+	     ( substr(acc,1,5) in ('40802') ) or
+	    ( substr(acc,1,3)='421' and nn>7 and nn<=14) then
+	    -- ИП
+	    if block.[TU].[0]<> 3 then
+	       return 'ТИП клиента '||ss||' не соответствует счету (ИП) ! ';
+	    end if;
+	end if;
+	
+	if
+	     ( substr(acc,1,5) in ('40817','40820','40911') ) or
+	     ( substr(acc,1,3) in ('423','426') ) then
+	    --ФЛ
+	    if block.[TU].[0]<> 2 then
+	       return 'ТИП клиента '||ss||' не соответствует счету (ФЛ) ! ';
+	    end if;
+	
+	end if;
+	
